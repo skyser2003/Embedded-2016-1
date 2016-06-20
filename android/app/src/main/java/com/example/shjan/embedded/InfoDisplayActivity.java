@@ -20,7 +20,6 @@ public class InfoDisplayActivity extends AppCompatActivity {
     // UI
     ArrayList<CheckBox> roomList;
 
-    CheckBox statusDisplay;
     Button buttonOn, buttonOff;
 
     TextView valueTemperature;
@@ -40,6 +39,7 @@ public class InfoDisplayActivity extends AppCompatActivity {
 
     // Data
     private IdealTemperatureGenerator tempGenerator;
+    private boolean systemOn = true;
     private boolean isInside = true;
 
     @Override
@@ -55,15 +55,13 @@ public class InfoDisplayActivity extends AppCompatActivity {
         bt = BluetoothConnector.instance();
 
         // Data
-        MyDB dbHelper = new MyDB(this,"past.db",null,1);
+        MyDB dbHelper = new MyDB(this, "past.db", null, 1);
         try {
             tempGenerator = new IdealTemperatureGenerator(dbHelper);
+        } catch (Exception e) {
         }
-        catch (Exception e)
-        {
-        }
+
         // UI variables
-        statusDisplay = (CheckBox) findViewById(R.id.status_display);
         buttonOn = (Button) findViewById(R.id.button_on);
         buttonOff = (Button) findViewById(R.id.button_off);
 
@@ -80,19 +78,21 @@ public class InfoDisplayActivity extends AppCompatActivity {
         spinnerGps = (Spinner) findViewById(R.id.spinner_gps);
 
         // Init data
-        statusDisplay.setEnabled(false);
-
         buttonOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                systemOn = true;
             }
         });
 
         buttonOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (systemOn == true) {
+                    turnOffAll();
+                }
 
+                systemOn = false;
             }
         });
 
@@ -136,13 +136,7 @@ public class InfoDisplayActivity extends AppCompatActivity {
                 } else {
                     isInside = false;
 
-                    valueTemperature.setText("0 C");
-                    valueHumidity.setText("0%");
-                    valueBrightness.setText("0");
-
-                    for (CheckBox checkbox : roomList) {
-                        checkbox.setChecked(false);
-                    }
+                    turnOffAll();
                 }
             }
 
@@ -158,8 +152,8 @@ public class InfoDisplayActivity extends AppCompatActivity {
             public void run() {
                 try {
                     while (true) {
-                        if (bt.isConnected() == false || isInside == false) {
-                            sleep(5000);
+                        if (bt.isConnected() == false || isInside == false || systemOn == false) {
+                            sleep(2000);
                             continue;
                         }
 
@@ -170,26 +164,31 @@ public class InfoDisplayActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (isInside == false) {
+                                    if (isInside == false || systemOn == false) {
                                         return;
                                     }
 
                                     SensorData sensor = new SensorData();
                                     sensor.setDataFromByte(buffer);
 
+                                    if (300 <= sensor.illu) {
+                                        turnOffAll();
+                                        return;
+                                    }
+
                                     valueTemperature.setText(String.valueOf(sensor.temp) + " C");
                                     valueHumidity.setText(String.valueOf(sensor.humi) + "%");
                                     valueBrightness.setText(String.valueOf(sensor.illu));
 
-                                    roomList.get(0).setChecked(250 <= sensor.dis1);
-                                    roomList.get(1).setChecked(250 <= sensor.dis2);
-                                    roomList.get(2).setChecked(250 <= sensor.pw);
-                                    roomList.get(3).setChecked(250 <= sensor.ad);
+                                    roomList.get(0).setChecked(sensor.dis1 <= 250);
+                                    roomList.get(1).setChecked(sensor.dis2 <= 250);
+                                    roomList.get(2).setChecked(sensor.pw <= 250);
+                                    roomList.get(3).setChecked(sensor.ad <= 250);
                                 }
                             });
                         }
 
-                        sleep(5000);
+                        sleep(2000);
                     }
                 } catch (Exception e) {
 
@@ -198,5 +197,15 @@ public class InfoDisplayActivity extends AppCompatActivity {
         };
 
         btThread.start();
+    }
+
+    private void turnOffAll() {
+        valueTemperature.setText("0 C");
+        valueHumidity.setText("0%");
+        valueBrightness.setText("0");
+
+        for (CheckBox checkbox : roomList) {
+            checkbox.setChecked(false);
+        }
     }
 }
