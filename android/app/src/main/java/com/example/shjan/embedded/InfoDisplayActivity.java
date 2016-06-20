@@ -3,7 +3,8 @@ package com.example.shjan.embedded;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,15 +28,19 @@ public class InfoDisplayActivity extends AppCompatActivity {
     TextView valueHumidity;
     TextView valueBrightness;
 
-    CheckBox checkManualTemperature;
+    EditText valueManualRoom;
     EditText valueManualTemperature;
+    Button buttonManualSubmit;
 
     Spinner spinnerGps;
 
-    // Etc
+    // Bluetooth
     private BluetoothConnector bt = null;
     private Thread btThread = null;
     static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+    // Data
+    private IdealTemperatureGenerator tempGenerator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,9 @@ public class InfoDisplayActivity extends AppCompatActivity {
         BluetoothConnector.init(this, address, uuid);
         bt = BluetoothConnector.instance();
 
+        // Data
+        tempGenerator = new IdealTemperatureGenerator();
+
         // UI variables
         statusDisplay = (CheckBox) findViewById(R.id.status_display);
         buttonOn = (Button) findViewById(R.id.button_on);
@@ -60,8 +68,9 @@ public class InfoDisplayActivity extends AppCompatActivity {
         valueHumidity = (TextView) findViewById(R.id.value_humidity);
         valueBrightness = (TextView) findViewById(R.id.value_brightness);
 
-        checkManualTemperature = (CheckBox) findViewById(R.id.checkbox_manual_temperature);
+        valueManualRoom = (EditText) findViewById(R.id.value_manual_room);
         valueManualTemperature = (EditText) findViewById(R.id.value_manual_temperature);
+        buttonManualSubmit = (Button) findViewById(R.id.button_manual_submit);
 
         spinnerGps = (Spinner) findViewById(R.id.spinner_gps);
 
@@ -86,20 +95,23 @@ public class InfoDisplayActivity extends AppCompatActivity {
         roomList.add((CheckBox) findViewById(R.id.room2));
         roomList.add((CheckBox) findViewById(R.id.room3));
         roomList.add((CheckBox) findViewById(R.id.room4));
-        roomList.add((CheckBox) findViewById(R.id.room5));
 
         for (CheckBox checkbox : roomList) {
             checkbox.setEnabled(false);
         }
 
-        checkManualTemperature.setOnClickListener(new View.OnClickListener() {
+        buttonManualSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                // TODO : send bluetooth manual data
+            public void onClick(View v) {
+                String roomTxt =valueManualRoom.getText().toString();
+                int roomID = Integer.getInteger(roomTxt,0);
+
+                String tempTxt = valueManualTemperature.getText().toString();
+                float manualTemp = Integer.getInteger(tempTxt, 0);
+
+                tempGenerator.setManualTemperature(manualTemp, roomID);
             }
         });
-
-        checkManualTemperature.setChecked(false);
 
         List<String> spinnerArray = new ArrayList<>();
         spinnerArray.add("ON");
@@ -132,8 +144,8 @@ public class InfoDisplayActivity extends AppCompatActivity {
                                     SensorData sensor = new SensorData();
                                     sensor.setDataFromByte(buffer);
 
-                                    valueTemperature.setText(String.valueOf(sensor.temp));
-                                    valueHumidity.setText(String.valueOf(sensor.humi));
+                                    valueTemperature.setText(String.valueOf(sensor.temp) + " C");
+                                    valueHumidity.setText(String.valueOf(sensor.humi) + "%");
                                     valueBrightness.setText(String.valueOf(sensor.illu));
 
                                     roomList.get(0).setChecked(250 <= sensor.dis1);
