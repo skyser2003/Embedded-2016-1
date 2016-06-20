@@ -2,6 +2,7 @@ package com.example.shjan.embedded;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,6 +32,7 @@ public class InfoDisplayActivity extends AppCompatActivity {
 
     // Etc
     private BluetoothConnector bt = null;
+    private Thread btThread = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,5 +101,48 @@ public class InfoDisplayActivity extends AppCompatActivity {
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGps.setAdapter(adapter);
+
+        // Bluetooth thread
+        btThread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        if (bt.isConnected() == false) {
+                            sleep(5000);
+                            continue;
+                        }
+
+                        final byte[] buffer = new byte[255];
+                        final int received = bt.read(buffer);
+
+                        if (received != 0) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SensorData sensor = new SensorData();
+                                    sensor.setDataFromByte(buffer);
+
+                                    valueTemperature.setText(String.valueOf(sensor.temp));
+                                    valueHumidity.setText(String.valueOf(sensor.humi));
+                                    valueBrightness.setText(String.valueOf(sensor.illu));
+
+                                    roomList.get(0).setChecked(250 <= sensor.dis1);
+                                    roomList.get(1).setChecked(250 <= sensor.dis2);
+                                    roomList.get(2).setChecked(250 <= sensor.pw);
+                                    roomList.get(3).setChecked(250 <= sensor.ad);
+                                }
+                            });
+                        }
+
+                        sleep(5000);
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        };
+
+        btThread.start();
     }
 }

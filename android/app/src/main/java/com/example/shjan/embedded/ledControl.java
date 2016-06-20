@@ -112,43 +112,6 @@ public class ledControl extends AppCompatActivity {
 
             }
         });
-
-        btThread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        if (bt.isConnected() == false) {
-                            sleep(5000);
-                            continue;
-                        }
-
-                        final byte[] buffer = new byte[255];
-                        final int received = bt.read(buffer);
-                        final SensorData sensor = new SensorData();
-                        sensor.setDataFromByte(buffer);
-                        Log.d("LOG", "received : " + received);
-
-                        if (received != 0) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    String str = new String(buffer, 0, received);
-                                    Log.d("UI", str);
-                                    btText.setText(sensor.toString());
-                                }
-                            });
-                        }
-
-                        sleep(5000);
-                    }
-                } catch (Exception e) {
-
-                }
-            }
-        };
-
-        btThread.start();
     }
 
     private void Disconnect() {
