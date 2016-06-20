@@ -214,7 +214,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/value_manual_room"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/text_const_room" />
+                android:layout_toEndOf="@+id/text_const_room"
+                android:text="0" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -230,7 +231,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/value_manual_temperature"
                 android:layout_alignTop="@+id/value_manual_room"
-                android:layout_toStartOf="@+id/text_const_temperature" />
+                android:layout_toStartOf="@+id/text_const_temperature"
+                android:text="25" />
 
         </RelativeLayout>
 
