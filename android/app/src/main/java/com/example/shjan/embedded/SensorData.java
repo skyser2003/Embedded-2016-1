@@ -21,8 +21,6 @@ public class SensorData {
     public int setDataFromByte(byte[] buffer)
     {
         illu = unsignedToBytes(buffer[0]) * (int)(Math.pow(2,8)) + unsignedToBytes(buffer[1]);
-        Log.d("errer",buffer[0] + "");
-        Log.d("errer",buffer[1] + "");
         dis1 = unsignedToBytes(buffer[2]) * (int)(Math.pow(2,8)) + unsignedToBytes(buffer[3]);
         dis2 = unsignedToBytes(buffer[4]) * (int)(Math.pow(2,8)) + unsignedToBytes(buffer[5]);
         pw = unsignedToBytes(buffer[6]) * (int)(Math.pow(2,8)) + unsignedToBytes(buffer[7]);

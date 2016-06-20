@@ -109,10 +109,10 @@ public class InfoDisplayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String roomTxt = valueManualRoom.getText().toString();
-                int roomID = Integer.getInteger(roomTxt, 0);
+                int roomID = Integer.parseInt(roomTxt);
 
                 String tempTxt = valueManualTemperature.getText().toString();
-                float manualTemp = Integer.getInteger(tempTxt, 0);
+                float manualTemp = Integer.parseInt(tempTxt);
 
                 tempGenerator.setManualTemperature(manualTemp, roomID);
             }
