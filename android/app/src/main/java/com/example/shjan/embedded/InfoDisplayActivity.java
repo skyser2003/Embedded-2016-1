@@ -55,8 +55,13 @@ public class InfoDisplayActivity extends AppCompatActivity {
         bt = BluetoothConnector.instance();
 
         // Data
-        tempGenerator = new IdealTemperatureGenerator();
-
+        MyDB dbHelper = new MyDB(this,"past.db",null,1);
+        try {
+            tempGenerator = new IdealTemperatureGenerator(dbHelper);
+        }
+        catch (Exception e)
+        {
+        }
         // UI variables
         statusDisplay = (CheckBox) findViewById(R.id.status_display);
         buttonOn = (Button) findViewById(R.id.button_on);
