@@ -87,4 +87,59 @@
         android:text="Brightness"
         android:textIsSelectable="false"
         android:textSize="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 C"
+        android:id="@+id/value_temperature"
+        android:layout_alignTop="@+id/text_temperature"
+        android:layout_alignEnd="@+id/room5"
+        android:textSize="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0%"
+        android:id="@+id/value_humidity"
+        android:textSize="30dp"
+        android:layout_alignTop="@+id/text_humidity"
+        android:layout_alignEnd="@+id/value_temperature" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/value_brightness"
+        android:textSize="30dp"
+        android:layout_alignTop="@+id/text_brightness"
+        android:layout_alignEnd="@+id/value_humidity" />
+
+    <TextView
+        android:id="@+id/text_manual_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:text="Manual"
+        android:textIsSelectable="false"
+        android:textSize="30dp"
+        android:layout_below="@+id/text_brightness"
+        android:layout_alignStart="@+id/text_brightness" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 C"
+        android:id="@+id/value_manual_temperature"
+        android:textSize="30dp"
+        android:layout_alignTop="@+id/text_manual_temperature"
+        android:layout_alignEnd="@+id/value_brightness" />
+
+    <CheckBox
+        android:id="@+id/checkbox_manual_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_alignTop="@+id/value_manual_temperature"
+        android:layout_toStartOf="@+id/room5" />
 </RelativeLayout>
