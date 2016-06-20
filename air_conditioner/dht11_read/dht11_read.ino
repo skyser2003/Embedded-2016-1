@@ -1,19 +1,17 @@
 #include <DHT11.h>
-
-int distanceSensor = 2;
-int tempSensor = 4;
-int phase = 0;
-DHT11 dht11(tempSensor);
-
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
+int pin=4;
+DHT11 dht11(pin); 
+void setup()
+{
+   Serial.begin(9600);
+  while (!Serial) {
+      ; // wait for serial port to connect. Needed for Leonardo only
+    }
   Serial1.begin(9600);
-
-  pinMode(distanceSensor, INPUT);
-  pinMode(3, INPUT);
 }
-void loop() {
+
+void loop()
+{
   char buffer[1024];
   int err;
   float temp, humi;
@@ -32,12 +30,11 @@ void loop() {
     Serial.print(err);
     Serial.println();    
   }
-  delay(DHT11_RETRY_DELAY);
+  delay(DHT11_RETRY_DELAY); //delay for reread
 
   int illu = analogRead(A0);
   int dis1 = analogRead(A1);
   int dis2 = analogRead(A2);
-  
   if(Serial1.available() > 0) {
     Serial.print("Received : ");
 
@@ -69,4 +66,6 @@ void loop() {
     Serial.println();
   }
 }
+
+
 
