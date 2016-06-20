@@ -1,5 +1,7 @@
 package com.example.shjan.embedded;
 
+import android.util.Log;
+
 /**
  * Created by Administrator on 2016-06-20.
  */
@@ -12,15 +14,21 @@ public class SensorData {
     public float temp;
     public float humi;
 
+    public static int unsignedToBytes(byte b) {
+        return b & 0xFF;
+    }
+
     public int setDataFromByte(byte[] buffer)
     {
-        illu = buffer[0] * (int)(Math.pow(2,24)) + buffer[1] * (int)(Math.pow(2,16)) + buffer[2] * (int)(Math.pow(2,8)) + buffer[3];
-        dis1 = buffer[4] * (int)(Math.pow(2,24)) + buffer[5] * (int)(Math.pow(2,16)) + buffer[6] * (int)(Math.pow(2,8)) + buffer[7];
-        dis2 = buffer[8] * (int)(Math.pow(2,24)) + buffer[9] * (int)(Math.pow(2,16)) + buffer[10] * (int)(Math.pow(2,8)) + buffer[11];
-        pw = buffer[12] * (int)(Math.pow(2,24)) + buffer[13] * (int)(Math.pow(2,16)) + buffer[14] * (int)(Math.pow(2,8)) + buffer[15];
-        ad = buffer[16] * (int)(Math.pow(2,24)) + buffer[17] * (int)(Math.pow(2,16)) + buffer[18] * (int)(Math.pow(2,8)) + buffer[19];
-        temp = (float)buffer[20] + ((float)buffer[21])/100;
-        humi = (float)buffer[21] + ((float)buffer[22])/100;
+        illu = unsignedToBytes(buffer[0]) * (int)(Math.pow(2,8)) + unsignedToBytes(buffer[1]);
+        Log.d("errer",buffer[0] + "");
+        Log.d("errer",buffer[1] + "");
+        dis1 = unsignedToBytes(buffer[2]) * (int)(Math.pow(2,8)) + unsignedToBytes(buffer[3]);
+        dis2 = unsignedToBytes(buffer[4]) * (int)(Math.pow(2,8)) + unsignedToBytes(buffer[5]);
+        pw = unsignedToBytes(buffer[6]) * (int)(Math.pow(2,8)) + unsignedToBytes(buffer[7]);
+        ad = unsignedToBytes(buffer[8]) * (int)(Math.pow(2,8)) + unsignedToBytes(buffer[9]);
+        temp = (float)unsignedToBytes(buffer[10]) + ((float)unsignedToBytes(buffer[11]))/100;
+        humi = (float)unsignedToBytes(buffer[12]) + ((float)unsignedToBytes(buffer[13]))/100;
         return -1;
     }
 

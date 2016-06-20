@@ -48,11 +48,17 @@ void loop()
   int pw = rangeSensorPW.getRange();
   int ad = rangeSensorAD.getRange();
 
-  Serial1.write(illu);
-  Serial1.write(dis1);
-  Serial1.write(dis2);
-  Serial1.write(pw);
-  Serial1.write(ad);
+  Serial1.write((byte)(illu / 256));
+  Serial.print((byte)(illu/256));
+  Serial1.write((byte)(illu % 256));
+  Serial1.write((byte)(dis1 / 256));
+  Serial1.write((byte)(dis1 % 256));
+  Serial1.write((byte)(dis2 / 256));
+  Serial1.write((byte)(dis2 % 256));
+  Serial1.write((byte)(pw / 256));
+  Serial1.write((byte)(pw % 256));
+  Serial1.write((byte)(ad / 256));
+  Serial1.write((byte)(ad % 2560));
   Serial1.write(tempHi);
   Serial1.write(tempLo);
   Serial1.write(humiHi);

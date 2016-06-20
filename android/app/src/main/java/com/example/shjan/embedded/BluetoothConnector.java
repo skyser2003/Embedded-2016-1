@@ -53,7 +53,7 @@ public class BluetoothConnector {
 
     public int read(byte[] buffer) {
         try {
-            return btSocket.getInputStream().read(buffer);
+            return btSocket.getInputStream().read(buffer,0,14);
         } catch (Exception e) {
             msg("read error");
         }
