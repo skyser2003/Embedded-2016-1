@@ -67,7 +67,7 @@
                 android:layout_marginLeft="30dp"
                 android:checked="false"
                 android:layout_alignTop="@+id/room2"
-                android:layout_toStartOf="@+id/room3" />
+                android:layout_toStartOf="@+id/room2" />
 
             <CheckBox
                 android:id="@+id/room2"
@@ -75,8 +75,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:checked="false"
-                android:layout_alignTop="@+id/text_room"
-                android:layout_toStartOf="@+id/room1" />
+                android:layout_alignBottom="@+id/text_room"
+                android:layout_toStartOf="@+id/room3" />
 
             <CheckBox
                 android:id="@+id/room3"

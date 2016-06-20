@@ -3,6 +3,7 @@ package com.example.shjan.embedded;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,6 +42,8 @@ public class InfoDisplayActivity extends AppCompatActivity {
     private IdealTemperatureGenerator tempGenerator;
     private boolean systemOn = true;
     private boolean isInside = true;
+
+    private int currentRoomID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,14 +179,57 @@ public class InfoDisplayActivity extends AppCompatActivity {
                                         return;
                                     }
 
+                                    boolean moveSensor1 = sensor.dis1 <= 250;
+                                    boolean moveSensor2 = sensor.dis2 <= 250;
+                                    boolean moveSensor3 = sensor.pw <= 250;
+
+                                    Log.d("MOVE 1", "" + (moveSensor1 ? 1 : 0));
+                                    Log.d("MOVE 2", "" + (moveSensor2 ? 1 : 0));
+                                    Log.d("MOVE 3", "" + (moveSensor3 ? 1 : 0));
+
+                                    switch (currentRoomID) {
+                                        case 0: {
+                                            if (moveSensor1) {
+                                                currentRoomID = 1;
+                                            }
+                                        }
+                                        break;
+
+                                        case 1: {
+                                            if (moveSensor1) {
+                                                currentRoomID = 0;
+                                            } else if (moveSensor2) {
+                                                currentRoomID = 2;
+                                            }
+                                        }
+                                        break;
+
+                                        case 2: {
+                                            if (moveSensor2) {
+                                                currentRoomID = 1;
+                                            } else if (moveSensor3) {
+                                                currentRoomID = 3;
+                                            }
+                                        }
+                                        break;
+
+                                        case 3: {
+                                            if (moveSensor3) {
+                                                currentRoomID = 2;
+                                            }
+                                        }
+                                        break;
+                                    }
+
                                     valueTemperature.setText(String.valueOf(sensor.temp) + " C");
                                     valueHumidity.setText(String.valueOf(sensor.humi) + "%");
                                     valueBrightness.setText(String.valueOf(sensor.illu));
 
-                                    roomList.get(0).setChecked(sensor.dis1 <= 250);
-                                    roomList.get(1).setChecked(sensor.dis2 <= 250);
-                                    roomList.get(2).setChecked(sensor.pw <= 250);
-                                    roomList.get(3).setChecked(sensor.ad <= 250);
+                                    for (CheckBox checkbox : roomList) {
+                                        checkbox.setChecked(false);
+                                    }
+
+                                    roomList.get(currentRoomID).setChecked(true);
                                 }
                             });
                         }
