@@ -3,9 +3,8 @@ package com.example.shjan.embedded;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -41,6 +40,7 @@ public class InfoDisplayActivity extends AppCompatActivity {
 
     // Data
     private IdealTemperatureGenerator tempGenerator;
+    private boolean isInside = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +108,8 @@ public class InfoDisplayActivity extends AppCompatActivity {
         buttonManualSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String roomTxt =valueManualRoom.getText().toString();
-                int roomID = Integer.getInteger(roomTxt,0);
+                String roomTxt = valueManualRoom.getText().toString();
+                int roomID = Integer.getInteger(roomTxt, 0);
 
                 String tempTxt = valueManualTemperature.getText().toString();
                 float manualTemp = Integer.getInteger(tempTxt, 0);
@@ -128,13 +128,37 @@ public class InfoDisplayActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGps.setAdapter(adapter);
 
+        spinnerGps.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    isInside = true;
+                } else {
+                    isInside = false;
+
+                    valueTemperature.setText("0 C");
+                    valueHumidity.setText("0%");
+                    valueBrightness.setText("0");
+
+                    for (CheckBox checkbox : roomList) {
+                        checkbox.setChecked(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         // Bluetooth thread
         btThread = new Thread() {
             @Override
             public void run() {
                 try {
                     while (true) {
-                        if (bt.isConnected() == false) {
+                        if (bt.isConnected() == false || isInside == false) {
                             sleep(5000);
                             continue;
                         }
@@ -146,6 +170,10 @@ public class InfoDisplayActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    if (isInside == false) {
+                                        return;
+                                    }
+
                                     SensorData sensor = new SensorData();
                                     sensor.setDataFromByte(buffer);
 
