@@ -36,10 +36,6 @@ public class ledControl extends AppCompatActivity {
     String address = null;
 
     BluetoothConnector bt = null;
-    Thread btThread;
-
-    //SPP UUID. Look for it
-    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +55,6 @@ public class ledControl extends AppCompatActivity {
         brightness = (SeekBar) findViewById(R.id.seekBar);
         lumn = (TextView) findViewById(R.id.lumn);
         btText = (TextView) findViewById(R.id.text_bluetooth_receive);
-
-        BluetoothConnector.init(this, address, myUUID);
-        bt = BluetoothConnector.instance();
 
         //commands to be sent to bluetooth
         btnOn.setOnClickListener(new View.OnClickListener() {

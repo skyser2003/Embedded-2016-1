@@ -9,216 +9,254 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.shjan.embedded.InfoDisplayActivity">
 
-    <TextView
-        android:id="@+id/text_room"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Room"
-        android:textIsSelectable="false"
-        android:textSize="30dp"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/text_status"
-        android:layout_alignParentStart="true" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <CheckBox
-        android:id="@+id/room1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginStart="27dp"
-        android:layout_alignTop="@+id/text_room"
-        android:layout_toEndOf="@+id/text_temperature" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <CheckBox
-        android:id="@+id/room2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/room1"
-        android:layout_alignTop="@+id/text_room"
-        android:layout_marginLeft="30dp" />
+            <TextView
+                android:id="@+id/text_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status"
+                android:textIsSelectable="false"
+                android:textSize="30dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
 
-    <CheckBox
-        android:id="@+id/room3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/room2"
-        android:layout_alignTop="@+id/text_room"
-        android:layout_marginLeft="30dp" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OFF"
+                android:id="@+id/button_on"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true" />
 
-    <CheckBox
-        android:id="@+id/room4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/room3"
-        android:layout_alignTop="@+id/text_room"
-        android:layout_marginLeft="30dp" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ON"
+                android:id="@+id/button_off"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/status_display" />
 
-    <CheckBox
-        android:id="@+id/room5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/room4"
-        android:layout_alignTop="@+id/text_room"
-        android:layout_marginLeft="30dp" />
+            <CheckBox
+                android:id="@+id/status_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
 
-    <TextView
-        android:id="@+id/text_temperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/text_room"
-        android:layout_marginTop="23dp"
-        android:text="Temperature"
-        android:textIsSelectable="false"
-        android:textSize="30dp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="63dp">
 
-    <TextView
-        android:id="@+id/text_humidity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/text_temperature"
-        android:layout_marginTop="23dp"
-        android:text="Humidity"
-        android:textIsSelectable="false"
-        android:textSize="30dp" />
+            <TextView
+                android:id="@+id/text_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Room"
+                android:textIsSelectable="false"
+                android:textSize="30dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
 
-    <TextView
-        android:id="@+id/text_brightness"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/text_humidity"
-        android:layout_marginTop="23dp"
-        android:text="Brightness"
-        android:textIsSelectable="false"
-        android:textSize="30dp" />
+            <CheckBox
+                android:id="@+id/room1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:checked="false"
+                android:layout_alignTop="@+id/room2"
+                android:layout_toStartOf="@+id/room3" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0 C"
-        android:id="@+id/value_temperature"
-        android:layout_alignTop="@+id/text_temperature"
-        android:layout_alignEnd="@+id/room5"
-        android:textSize="30dp" />
+            <CheckBox
+                android:id="@+id/room2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:checked="false"
+                android:layout_alignTop="@+id/text_room"
+                android:layout_toStartOf="@+id/room1" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0%"
-        android:id="@+id/value_humidity"
-        android:textSize="30dp"
-        android:layout_alignTop="@+id/text_humidity"
-        android:layout_alignEnd="@+id/value_temperature" />
+            <CheckBox
+                android:id="@+id/room3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:checked="false"
+                android:layout_alignTop="@+id/room1"
+                android:layout_toStartOf="@+id/room4" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:id="@+id/value_brightness"
-        android:textSize="30dp"
-        android:layout_alignTop="@+id/text_brightness"
-        android:layout_alignEnd="@+id/value_humidity" />
+            <CheckBox
+                android:id="@+id/room4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:checked="false"
+                android:layout_alignTop="@+id/room3"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
 
-    <TextView
-        android:id="@+id/text_manual_temperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:text="Manual"
-        android:textIsSelectable="false"
-        android:textSize="30dp"
-        android:layout_below="@+id/text_brightness"
-        android:layout_alignStart="@+id/text_brightness" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="58dp">
 
-    <CheckBox
-        android:id="@+id/checkbox_manual_temperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_alignTop="@+id/text_manual_temperature"
-        android:layout_alignStart="@+id/room1" />
+            <TextView
+                android:id="@+id/text_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Temperature"
+                android:textIsSelectable="false"
+                android:textSize="30dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
 
-    <TextView
-        android:id="@+id/text_fake_gps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:text="GPS"
-        android:textIsSelectable="false"
-        android:textSize="30dp"
-        android:layout_below="@+id/text_manual_temperature"
-        android:layout_alignParentStart="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 C"
+                android:id="@+id/value_temperature"
+                android:textSize="30dp"
+                android:layout_alignTop="@+id/text_temperature"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner_gps"
-        android:layout_alignTop="@+id/text_fake_gps"
-        android:layout_alignEnd="@+id/room5"
-        android:layout_alignBottom="@+id/text_fake_gps"
-        android:layout_toEndOf="@+id/room2"
-        android:layout_alignStart="@+id/room3" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="58dp" >
 
-    <TextView
-        android:id="@+id/text_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status"
-        android:textIsSelectable="false"
-        android:textSize="30dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+            <TextView
+                android:id="@+id/text_humidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Humidity"
+                android:textIsSelectable="false"
+                android:textSize="30dp"
+                android:layout_alignBottom="@+id/value_humidity"
+                android:layout_alignParentStart="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="OFF"
-        android:id="@+id/button_on"
-        android:layout_above="@+id/text_room"
-        android:layout_alignEnd="@+id/room5"
-        android:layout_toEndOf="@+id/room3" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0%"
+                android:id="@+id/value_humidity"
+                android:textSize="30dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ON"
-        android:id="@+id/button_off"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/room2"
-        android:layout_alignBottom="@+id/button_on"
-        android:layout_toStartOf="@+id/button_on" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="58dp" >
 
-    <CheckBox
-        android:id="@+id/status_display"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_alignBottom="@+id/button_off"
-        android:layout_alignEnd="@+id/room1" />
+            <TextView
+                android:id="@+id/text_brightness"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Brightness"
+                android:textIsSelectable="false"
+                android:textSize="30dp"
+                android:layout_alignBottom="@+id/value_brightness"
+                android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="C"
-        android:id="@+id/text_const_temperature"
-        android:textSize="30dp"
-        android:layout_alignBottom="@+id/checkbox_manual_temperature"
-        android:layout_alignStart="@+id/value_brightness" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/value_brightness"
+                android:textSize="30dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberSigned"
-        android:ems="10"
-        android:id="@+id/value_manual_temperature"
-        android:text="0"
-        android:textSize="25dp"
-        android:layout_alignBottom="@+id/text_manual_temperature"
-        android:layout_alignEnd="@+id/room4"
-        android:layout_toEndOf="@+id/checkbox_manual_temperature"
-        android:textAllCaps="false"
-        android:textAlignment="textEnd" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="58dp" >
+
+            <TextView
+                android:id="@+id/text_manual_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manual"
+                android:textIsSelectable="false"
+                android:textSize="30dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="C"
+                android:id="@+id/text_const_temperature"
+                android:textSize="30dp"
+                android:layout_alignTop="@+id/text_manual_temperature"
+                android:layout_toStartOf="@+id/button_manual_submit" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Room"
+                android:id="@+id/text_const_room"
+                android:textSize="30dp"
+                android:layout_alignTop="@+id/text_manual_temperature"
+                android:layout_toEndOf="@+id/text_manual_temperature"
+                android:layout_marginStart="19dp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/value_manual_room"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/text_const_room" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OK"
+                android:id="@+id/button_manual_submit"
+                android:layout_gravity="right"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/value_manual_temperature"
+                android:layout_alignTop="@+id/value_manual_room"
+                android:layout_toStartOf="@+id/text_const_temperature" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="58dp" >
+
+            <TextView
+                android:id="@+id/text_fake_gps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GPS"
+                android:textIsSelectable="false"
+                android:textSize="30dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_gps"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/text_fake_gps" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>
