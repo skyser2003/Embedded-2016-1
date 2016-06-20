@@ -24,6 +24,9 @@ public class InfoDisplayActivity extends AppCompatActivity {
     // UI
     ArrayList<CheckBox> roomList;
 
+    float[] targetTemp = {0f,0f,0f,0f};
+    boolean[] manual = {false,false,false,false};
+
     LocationManager miocManager;
     GPSProvider gps;
     Button buttonOn, buttonOff;
@@ -140,6 +143,8 @@ public class InfoDisplayActivity extends AppCompatActivity {
                 float manualTemp = Integer.parseInt(tempTxt);
 
                 tempGenerator.setManualTemperature(manualTemp, roomID);
+
+                targetTemp[roomID] = manualTemp;
             }
         });
 
@@ -184,7 +189,16 @@ public class InfoDisplayActivity extends AppCompatActivity {
 
                         final byte[] buffer = new byte[255];
                         final int received = bt.read(buffer);
+                        final byte[] sendBuffer = new byte[8];
+                        for(int i = 0; i < 4; i++)
+                        {
+                            sendBuffer[2 * i] = (byte)(targetTemp[i] / 256);
+                            sendBuffer[2 * i + 1] = (byte)(targetTemp[i] % 256);
+                        }
 
+                        Log.d("send","start");
+                        bt.write(sendBuffer);
+                        Log.d("send","ok");
                         if (received != 0) {
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -284,12 +298,18 @@ public class InfoDisplayActivity extends AppCompatActivity {
                                     int predictedRoom = movingPredict.predict(pastRoomID,currentRoomID);
                                     for (int i = 0; i < roomDestTempList.size(); ++i) {
                                         TextView text = roomDestTempList.get(i);
-                                        if(i == currentRoomID)
-                                            text.setText("Room " + i + " : " + tempGenerator.getIdealTemperature(i) + " C");
-                                        else if(i == predictedRoom)
-                                            text.setText("Room " + i + " : " + (tempGenerator.getIdealTemperature(i) + 2) + " C");
-                                        else
-                                            text.setText("Room " + i + " : " + (tempGenerator.getIdealTemperature(i) + 4) + " C");
+                                        if(i == currentRoomID) {
+                                            targetTemp[i] = tempGenerator.getIdealTemperature(i);
+                                            text.setText("Room " + i + " : " + targetTemp[i] + " C");
+                                        }
+                                        else if(i == predictedRoom) {
+                                            targetTemp[i] = (tempGenerator.getIdealTemperature(i) + 2);
+                                            text.setText("Room " + i + " : " + targetTemp[i] + " C");
+                                        }
+                                        else {
+                                            targetTemp[i] = (tempGenerator.getIdealTemperature(i) + 4);
+                                            text.setText("Room " + i + " : " + targetTemp[i] + " C");
+                                        }
                                     }
                                 }
                             });
