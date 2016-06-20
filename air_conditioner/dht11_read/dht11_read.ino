@@ -1,4 +1,13 @@
-#include <DHT11.h>
+#include "DHT11.h"
+#include "Maxbotix.h"
+
+
+Maxbotix rangeSensorPW(8, Maxbotix::PW, Maxbotix::LV);
+#ifdef MAXBOTIX_WITH_SOFTWARE_SERIAL
+  Maxbotix rangeSensorTX(6, Maxbotix::TX, Maxbotix::LV);
+#endif
+Maxbotix rangeSensorAD(A3, Maxbotix::AN, Maxbotix::LV);
+
 int pin=4;
 DHT11 dht11(pin); 
 void setup()
@@ -12,15 +21,16 @@ void setup()
 
 void loop()
 {
+  
   char buffer[1024];
   int err;
-  float temp, humi;
-  if((err=dht11.read(humi, temp))==0)
+  byte tempHi, humiHi,tempLo, humiLo;
+  if((err=dht11.read(humiHi,humiLo, tempHi,tempLo))==0)
   {
     Serial.print("temperature:");
-    Serial.print(temp);
+    Serial.print(tempHi);
     Serial.print(" humidity:");
-    Serial.print(humi);
+    Serial.print(humiHi);
     Serial.println();
   }
   else
@@ -30,11 +40,35 @@ void loop()
     Serial.print(err);
     Serial.println();    
   }
-  delay(DHT11_RETRY_DELAY); //delay for reread
+  delay(5000); //delay for reread
 
   int illu = analogRead(A0);
   int dis1 = analogRead(A1);
   int dis2 = analogRead(A2);
+  int pw = rangeSensorPW.getRange();
+  int ad = rangeSensorAD.getRange();
+
+  Serial1.write(illu);
+  Serial1.write(dis1);
+  Serial1.write(dis2);
+  Serial1.write(pw);
+  Serial1.write(ad);
+  Serial1.write(tempHi);
+  Serial1.write(tempLo);
+  Serial1.write(humiHi);
+  Serial1.write(humiLo);
+
+  Serial.print("illu : ");
+  Serial.print(illu);
+  Serial.print(" dis1 : ");
+  Serial.print(dis1);
+  Serial.print(" dis2 : ");
+  Serial.print(dis2);
+  Serial.print(" pw : ");
+  Serial.print(pw);
+  Serial.print(" ad : ");
+  Serial.print(ad);
+  
   if(Serial1.available() > 0) {
     Serial.print("Received : ");
 
@@ -46,6 +80,8 @@ void loop()
 
     Serial.println();
   }
+
+  
 
   if(Serial.available() > 0) {
     int i = 0;
