@@ -189,11 +189,14 @@ public class InfoDisplayActivity extends AppCompatActivity {
 
                         final byte[] buffer = new byte[255];
                         final int received = bt.read(buffer);
-                        final byte[] sendBuffer = new byte[8];
+                        final byte[] sendBuffer = new byte[16];
                         for(int i = 0; i < 4; i++)
                         {
-                            sendBuffer[2 * i] = (byte)(targetTemp[i] / 256);
-                            sendBuffer[2 * i + 1] = (byte)(targetTemp[i] % 256);
+                            int floatValue = Float.floatToIntBits(targetTemp[i]);
+                            sendBuffer[2 * i] = (byte)(floatValue >> 24);
+                            sendBuffer[2 * i + 1] = (byte)(floatValue >> 16);
+                            sendBuffer[2 * i + 2] = (byte)(floatValue >> 8);
+                            sendBuffer[2 * i + 3] = (byte)(floatValue);
                         }
 
                         Log.d("send","start");

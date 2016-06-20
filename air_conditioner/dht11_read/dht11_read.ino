@@ -79,8 +79,12 @@ void loop()
     Serial.print("Received : ");
 
     while(Serial1.available()) {
-      char o = Serial1.read();
-      Serial.print(o);
+      byte a1 = Serial1.read();
+      byte a2 = Serial1.read();
+      byte a3 = Serial1.read();
+      byte a4 = Serial1.read();
+      int a = (a1 >> 24) + (a2 >> 16) + (a3 >> 8) + a4;
+      Serial.print(a);
       delay(10);
     }
 
