@@ -252,6 +252,58 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/text_dest_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dest. Temperature"
+                android:textIsSelectable="false"
+                android:textSize="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_dest_temperature"
+                android:layout_alignParentStart="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Room 1 : 0 C"
+                    android:id="@+id/value_dest_temp_room1"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Room 2 : 0 C"
+                    android:id="@+id/value_dest_temp_room2"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Room 3 : 0 C"
+                    android:id="@+id/value_dest_temp_room3"
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Room 4 : 0 C"
+                    android:id="@+id/value_dest_temp_room4"
+                    android:textSize="25dp" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -33,6 +33,8 @@ public class InfoDisplayActivity extends AppCompatActivity {
 
     Spinner spinnerGps;
 
+    ArrayList<TextView> roomDestTempList;
+
     // Bluetooth
     private BluetoothConnector bt = null;
     private Thread btThread = null;
@@ -69,6 +71,10 @@ public class InfoDisplayActivity extends AppCompatActivity {
         buttonOff = (Button) findViewById(R.id.button_off);
 
         roomList = new ArrayList<>();
+        roomList.add((CheckBox) findViewById(R.id.room1));
+        roomList.add((CheckBox) findViewById(R.id.room2));
+        roomList.add((CheckBox) findViewById(R.id.room3));
+        roomList.add((CheckBox) findViewById(R.id.room4));
 
         valueTemperature = (TextView) findViewById(R.id.value_temperature);
         valueHumidity = (TextView) findViewById(R.id.value_humidity);
@@ -79,6 +85,12 @@ public class InfoDisplayActivity extends AppCompatActivity {
         buttonManualSubmit = (Button) findViewById(R.id.button_manual_submit);
 
         spinnerGps = (Spinner) findViewById(R.id.spinner_gps);
+
+        roomDestTempList = new ArrayList<>();
+        roomDestTempList.add((TextView) findViewById(R.id.value_dest_temp_room1));
+        roomDestTempList.add((TextView) findViewById(R.id.value_dest_temp_room2));
+        roomDestTempList.add((TextView) findViewById(R.id.value_dest_temp_room3));
+        roomDestTempList.add((TextView) findViewById(R.id.value_dest_temp_room4));
 
         // Init data
         buttonOn.setOnClickListener(new View.OnClickListener() {
@@ -98,11 +110,6 @@ public class InfoDisplayActivity extends AppCompatActivity {
                 systemOn = false;
             }
         });
-
-        roomList.add((CheckBox) findViewById(R.id.room1));
-        roomList.add((CheckBox) findViewById(R.id.room2));
-        roomList.add((CheckBox) findViewById(R.id.room3));
-        roomList.add((CheckBox) findViewById(R.id.room4));
 
         for (CheckBox checkbox : roomList) {
             checkbox.setEnabled(false);
@@ -230,6 +237,11 @@ public class InfoDisplayActivity extends AppCompatActivity {
                                     }
 
                                     roomList.get(currentRoomID).setChecked(true);
+
+                                    for (int i = 0; i < roomDestTempList.size(); ++i) {
+                                        TextView text = roomDestTempList.get(i);
+                                        text.setText("Room " + i + " : " + tempGenerator.getIdealTemperature(i) + " C");
+                                    }
                                 }
                             });
                         }
@@ -252,6 +264,10 @@ public class InfoDisplayActivity extends AppCompatActivity {
 
         for (CheckBox checkbox : roomList) {
             checkbox.setChecked(false);
+        }
+        for (int i = 0; i < roomDestTempList.size(); ++i) {
+            TextView text = roomDestTempList.get(i);
+            text.setText("Room " + i + " : 0 C");
         }
     }
 }
