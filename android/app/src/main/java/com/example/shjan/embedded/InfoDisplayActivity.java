@@ -42,9 +42,11 @@ public class InfoDisplayActivity extends AppCompatActivity {
 
     // Data
     private IdealTemperatureGenerator tempGenerator;
+    private MovingPredict movingPredict;
     private boolean systemOn = true;
     private boolean isInside = true;
 
+    private int pastRoomID = -1;
     private int currentRoomID = 0;
 
     @Override
@@ -60,9 +62,10 @@ public class InfoDisplayActivity extends AppCompatActivity {
         bt = BluetoothConnector.instance();
 
         // Data
-        MyDB dbHelper = new MyDB(this, "past.db", null, 1);
+        MyDB dbHelper = new MyDB(this, "past.db", null, 3);
         try {
             tempGenerator = new IdealTemperatureGenerator(dbHelper);
+            movingPredict = new MovingPredict(dbHelper);
         } catch (Exception e) {
         }
 
@@ -197,6 +200,8 @@ public class InfoDisplayActivity extends AppCompatActivity {
                                     switch (currentRoomID) {
                                         case 0: {
                                             if (moveSensor1) {
+                                                movingPredict.moving(pastRoomID,0,1);
+                                                pastRoomID = 0;
                                                 currentRoomID = 1;
                                             }
                                         }
@@ -204,25 +209,35 @@ public class InfoDisplayActivity extends AppCompatActivity {
 
                                         case 1: {
                                             if (moveSensor1) {
+                                                movingPredict.moving(pastRoomID,1,0);
+                                                pastRoomID = 1;
                                                 currentRoomID = 0;
                                             } else if (moveSensor2) {
+                                                movingPredict.moving(pastRoomID,1,2);
+                                                pastRoomID = 1;
                                                 currentRoomID = 2;
+                                            } else if (moveSensor3) {
+                                                movingPredict.moving(pastRoomID,1,3);
+                                                pastRoomID = 1;
+                                                currentRoomID = 3;
                                             }
                                         }
                                         break;
 
                                         case 2: {
                                             if (moveSensor2) {
+                                                movingPredict.moving(pastRoomID,2,1);
+                                                pastRoomID = 2;
                                                 currentRoomID = 1;
-                                            } else if (moveSensor3) {
-                                                currentRoomID = 3;
                                             }
                                         }
                                         break;
 
                                         case 3: {
                                             if (moveSensor3) {
-                                                currentRoomID = 2;
+                                                movingPredict.moving(pastRoomID,3,1);
+                                                pastRoomID = 3;
+                                                currentRoomID = 1;
                                             }
                                         }
                                         break;
@@ -237,10 +252,15 @@ public class InfoDisplayActivity extends AppCompatActivity {
                                     }
 
                                     roomList.get(currentRoomID).setChecked(true);
-
+                                    int predictedRoom = movingPredict.predict(pastRoomID,currentRoomID);
                                     for (int i = 0; i < roomDestTempList.size(); ++i) {
                                         TextView text = roomDestTempList.get(i);
-                                        text.setText("Room " + i + " : " + tempGenerator.getIdealTemperature(i) + " C");
+                                        if(i == currentRoomID)
+                                            text.setText("Room " + i + " : " + tempGenerator.getIdealTemperature(i) + " C");
+                                        else if(i == predictedRoom)
+                                            text.setText("Room " + i + " : " + (tempGenerator.getIdealTemperature(i) + 2) + " C");
+                                        else
+                                            text.setText("Room " + i + " : " + (tempGenerator.getIdealTemperature(i) + 4) + " C");
                                     }
                                 }
                             });

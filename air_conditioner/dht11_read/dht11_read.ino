@@ -40,7 +40,7 @@ void loop()
     Serial.print(err);
     Serial.println();    
   }
-  delay(5000); //delay for reread
+  delay(2000); //delay for reread
 
   int illu = analogRead(A0);
   int dis1 = analogRead(A1);
