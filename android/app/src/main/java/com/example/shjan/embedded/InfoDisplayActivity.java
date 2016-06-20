@@ -1,6 +1,9 @@
 package com.example.shjan.embedded;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,6 +24,8 @@ public class InfoDisplayActivity extends AppCompatActivity {
     // UI
     ArrayList<CheckBox> roomList;
 
+    LocationManager miocManager;
+    GPSProvider gps;
     Button buttonOn, buttonOff;
 
     TextView valueTemperature;
@@ -46,8 +51,13 @@ public class InfoDisplayActivity extends AppCompatActivity {
     private boolean systemOn = true;
     private boolean isInside = true;
 
+    private boolean GPSON = false;
+
     private int pastRoomID = -1;
     private int currentRoomID = 0;
+
+    private double homeLongitude = 0;
+    private double homelatitude = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +78,8 @@ public class InfoDisplayActivity extends AppCompatActivity {
             movingPredict = new MovingPredict(dbHelper);
         } catch (Exception e) {
         }
+        miocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        gps = new GPSProvider(miocManager);
 
         // UI variables
         buttonOn = (Button) findViewById(R.id.button_on);
@@ -145,11 +157,11 @@ public class InfoDisplayActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    isInside = true;
+                    GPSON = true;
+                    Log.d("GPS","On");
                 } else {
-                    isInside = false;
-
-                    turnOffAll();
+                    GPSON = false;
+                    Log.d("GPS","Off");
                 }
             }
 
@@ -165,7 +177,7 @@ public class InfoDisplayActivity extends AppCompatActivity {
             public void run() {
                 try {
                     while (true) {
-                        if (bt.isConnected() == false || isInside == false || systemOn == false) {
+                        if (bt.isConnected() == false || systemOn == false) {
                             sleep(2000);
                             continue;
                         }
@@ -177,7 +189,7 @@ public class InfoDisplayActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (isInside == false || systemOn == false) {
+                                    if ( systemOn == false) {
                                         return;
                                     }
 
@@ -189,6 +201,23 @@ public class InfoDisplayActivity extends AppCompatActivity {
                                         return;
                                     }
 
+                                    double nowLongitude = gps.getLongitude();
+                                    double nowLatitude = gps.getLatitude();
+
+                                    float[] distance = new float[2];
+                                    float actual_distance;
+
+                                    Location.distanceBetween(nowLatitude,nowLongitude,homelatitude,homeLongitude,distance);
+                                    actual_distance = distance[0];
+
+                                    Log.d("GPS", actual_distance + "");
+                                    Log.d("GPS", GPSON + "");
+                                    if(GPSON == true) {
+                                        if (actual_distance > 1000) {
+                                            turnOffAll();
+                                            return;
+                                        }
+                                    }
                                     boolean moveSensor1 = sensor.dis1 <= 250;
                                     boolean moveSensor2 = sensor.dis2 <= 250;
                                     boolean moveSensor3 = sensor.pw <= 250;
