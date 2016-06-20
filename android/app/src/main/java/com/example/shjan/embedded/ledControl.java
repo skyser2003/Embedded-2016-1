@@ -125,7 +125,8 @@ public class ledControl extends AppCompatActivity {
 
                         final byte[] buffer = new byte[255];
                         final int received = bt.read(buffer);
-
+                        final SensorData sensor = new SensorData();
+                        sensor.setDataFromByte(buffer);
                         Log.d("LOG", "received : " + received);
 
                         if (received != 0) {
@@ -134,7 +135,7 @@ public class ledControl extends AppCompatActivity {
                                 public void run() {
                                     String str = new String(buffer, 0, received);
                                     Log.d("UI", str);
-                                    btText.setText(str);
+                                    btText.setText(sensor.toString());
                                 }
                             });
                         }
