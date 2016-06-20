@@ -1,5 +1,6 @@
 package com.example.shjan.embedded;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class InfoDisplayActivity extends AppCompatActivity {
     // UI
@@ -33,12 +35,21 @@ public class InfoDisplayActivity extends AppCompatActivity {
     // Etc
     private BluetoothConnector bt = null;
     private Thread btThread = null;
+    static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_display);
 
+        // Bluetooth init
+        Intent i = getIntent();
+        String address = i.getStringExtra(DeviceList.EXTRA_ADDRESS); //receive the address of the bluetooth device
+
+        BluetoothConnector.init(this, address, uuid);
+        bt = BluetoothConnector.instance();
+
+        // UI variables
         statusDisplay = (CheckBox) findViewById(R.id.status_display);
         buttonOn = (Button) findViewById(R.id.button_on);
         buttonOff = (Button) findViewById(R.id.button_off);
@@ -53,8 +64,6 @@ public class InfoDisplayActivity extends AppCompatActivity {
         valueManualTemperature = (EditText) findViewById(R.id.value_manual_temperature);
 
         spinnerGps = (Spinner) findViewById(R.id.spinner_gps);
-
-        bt = BluetoothConnector.instance();
 
         // Init data
         statusDisplay.setEnabled(false);
