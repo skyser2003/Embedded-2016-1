@@ -184,7 +184,7 @@ public class InfoDisplayActivity extends AppCompatActivity {
                                     SensorData sensor = new SensorData();
                                     sensor.setDataFromByte(buffer);
 
-                                    if (300 <= sensor.illu) {
+                                    if (450 <= sensor.illu) {
                                         turnOffAll();
                                         return;
                                     }
